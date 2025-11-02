@@ -41,6 +41,5 @@ services:
 databases:
   - name: credit-approval-db
     databaseName: credit_db
-    user: postgres
     plan: free
 
