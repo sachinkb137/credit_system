@@ -1,0 +1,46 @@
+services:
+  - type: web
+    name: credit-approval-system
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        generateValue: true
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DB_HOST
+        fromDatabase:
+          type: postgresql
+          name: credit-approval-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          type: postgresql
+          name: credit-approval-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          type: postgresql
+          name: credit-approval-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          type: postgresql
+          name: credit-approval-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          type: postgresql
+          name: credit-approval-db
+          property: password
+
+databases:
+  - name: credit-approval-db
+    databaseName: credit_db
+    user: postgres
+    plan: free
+

@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: credit_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ..:/workspace
+    working_dir: /workspace/credit_approval_system
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DJANGO_SETTINGS_MODULE=credit_approval_system.settings
+      - DEBUG=True
+
+  celery:
+    build: .
+    command: celery -A credit_approval_system worker --loglevel=info
+    volumes:
+      - ..:/workspace
+    working_dir: /workspace/credit_approval_system
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DJANGO_SETTINGS_MODULE=credit_approval_system.settings
+
+volumes:
+  postgres_data:
