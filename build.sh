@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Change to the project directory
-cd /app/credit_approval_system
+cd /app
 
 # Wait for PostgreSQL to be ready
 echo "Waiting for PostgreSQL to be ready..."
